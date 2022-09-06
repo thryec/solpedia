@@ -79,7 +79,7 @@ contract Wiki {
         editors[identifier] = msg.sender;
         links[identifier] = ipfsHash;
 
-        console.log("update identifier", identifier);
+        console.log("new version identifier", identifier);
         emit NewVersionCreated(
             existingArticleId,
             newVersionId,
