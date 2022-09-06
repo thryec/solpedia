@@ -15,13 +15,13 @@ contract Wiki {
     Counters.Counter public versionId;
 
     /// @notice Mapping to match specific article and version IDs to their editors.
-    mapping(string => address) editors;
+    mapping(string => address) public editors;
 
     /// @notice Mapping to match specific article and version IDs to their IPFS CIDs.
-    mapping(string => string) links;
+    mapping(string => string) public links;
 
     /// @notice Mapping to track the number of versions in each article.
-    mapping(uint256 => uint256) versions;
+    mapping(uint256 => uint256) public versions;
 
     /// @notice Emits when a new article is created.
     event ArticleCreated(
@@ -58,8 +58,6 @@ contract Wiki {
             currentVersionIdStr
         );
 
-        console2.log("create identifier", identifier);
-
         editors[identifier] = msg.sender;
         links[identifier] = ipfsHash;
 
@@ -82,7 +80,7 @@ contract Wiki {
         uint256 maxArticleId = articleId.current();
         require(
             existingArticleId < maxArticleId,
-            "This article does not exist"
+            "This article does not exist."
         );
         uint256 currentVersionId = versions[existingArticleId];
         uint256 newVersionId = currentVersionId + 1;
