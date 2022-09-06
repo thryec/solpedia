@@ -3,7 +3,7 @@ pragma solidity 0.8.16;
 
 import {Counters} from "lib/openzeppelin-contracts/contracts/utils/Counters.sol";
 import {Strings} from "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
-import {console} from "forge-std/console.sol";
+import {console2} from "forge-std/console2.sol";
 
 contract Wiki {
     using Counters for Counters.Counter;
@@ -43,7 +43,7 @@ contract Wiki {
             currentVersionIdStr
         );
 
-        console.log("create identifier", identifier);
+        console2.log("create identifier", identifier);
 
         editors[identifier] = msg.sender;
         links[identifier] = ipfsHash;
@@ -79,7 +79,7 @@ contract Wiki {
         editors[identifier] = msg.sender;
         links[identifier] = ipfsHash;
 
-        console.log("new version identifier", identifier);
+        console2.log("new version identifier", identifier);
         emit NewVersionCreated(
             existingArticleId,
             newVersionId,

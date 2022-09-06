@@ -4,7 +4,7 @@ pragma solidity 0.8.16;
 import "../src/Wiki.sol";
 import "forge-std/Test.sol";
 import {Vm} from "forge-std/Vm.sol";
-import {console} from "forge-std/console.sol";
+import {console2} from "forge-std/console2.sol";
 
 contract ContractTest is Test {
     Wiki internal wiki;
@@ -17,7 +17,7 @@ contract ContractTest is Test {
 
     function testCreateArticle() public {
         uint256 articleId = wiki.createArticle(ipfsHash1);
-        console.log("new article id", articleId);
+        console2.log("new article id", articleId);
         wiki.addVersion(articleId, ipfsHash1);
     }
 }
