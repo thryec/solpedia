@@ -21,14 +21,17 @@ contract Wiki {
         string ipfsHash
     );
 
-    event ArticleEdited(
+    event NewVersionCreated(
         uint256 indexed articleId,
         uint256 indexed versionId,
         address indexed editor,
         string ipfsHash
     );
 
-    function createArticle(string calldata ipfsHash) public {
+    function createArticle(string calldata ipfsHash)
+        public
+        returns (uint256 createdArticleId)
+    {
         uint256 currentArticleId = articleId.current();
         uint256 currentVersionId = versionId.current();
         string memory currentArticleIdStr = Strings.toString(currentArticleId);
@@ -40,7 +43,7 @@ contract Wiki {
             currentVersionIdStr
         );
 
-        console.log("identifier", identifier);
+        console.log("create identifier", identifier);
 
         editors[identifier] = msg.sender;
         links[identifier] = ipfsHash;
@@ -48,16 +51,20 @@ contract Wiki {
         articleId.increment();
 
         emit ArticleCreated(currentArticleId, msg.sender, ipfsHash);
+        return currentArticleId;
     }
 
     function addVersion(uint256 existingArticleId, string calldata ipfsHash)
         public
     {
-        // check that exsitingArticleId exists
         uint256 maxArticleId = articleId.current();
-        require(existingArticleId < maxArticleId, "");
+        require(
+            existingArticleId < maxArticleId,
+            "This article does not exist"
+        );
         uint256 currentVersionId = versions[existingArticleId];
-        uint256 newVersionId = currentVersionId++;
+        uint256 newVersionId = currentVersionId + 1;
+
         string memory existingArticleIdStr = Strings.toString(
             existingArticleId
         );
@@ -72,6 +79,12 @@ contract Wiki {
         editors[identifier] = msg.sender;
         links[identifier] = ipfsHash;
 
-        console.log("identifier", identifier);
+        console.log("update identifier", identifier);
+        emit NewVersionCreated(
+            existingArticleId,
+            newVersionId,
+            msg.sender,
+            ipfsHash
+        );
     }
 }

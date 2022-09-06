@@ -15,7 +15,9 @@ contract ContractTest is Test {
         wiki = new Wiki();
     }
 
-    function testExample() public {
-        wiki.createArticle(ipfsHash1);
+    function testCreateArticle() public {
+        uint256 articleId = wiki.createArticle(ipfsHash1);
+        console.log("new article id", articleId);
+        wiki.addVersion(articleId, ipfsHash1);
     }
 }
