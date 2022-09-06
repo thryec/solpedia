@@ -13,7 +13,7 @@ contract Wiki {
 
     mapping(string => address) editors;
     mapping(string => string) links;
-    mapping(uint256 => uint256) articleIdToVersionNum;
+    mapping(uint256 => uint256) versions;
 
     event ArticleCreated(
         uint256 indexed articleId,
@@ -31,11 +31,6 @@ contract Wiki {
     function createArticle(string calldata ipfsHash) public {
         uint256 currentArticleId = articleId.current();
         uint256 currentVersionId = versionId.current();
-        console.log(
-            "article and version ids",
-            currentArticleId,
-            currentVersionId
-        );
         string memory currentArticleIdStr = Strings.toString(currentArticleId);
         string memory currentVersionIdStr = Strings.toString(currentVersionId);
 
@@ -55,7 +50,28 @@ contract Wiki {
         emit ArticleCreated(currentArticleId, msg.sender, ipfsHash);
     }
 
-    function addVersion(uint256 currentArticleId, string calldata ipfsHash)
+    function addVersion(uint256 existingArticleId, string calldata ipfsHash)
         public
-    {}
+    {
+        // check that exsitingArticleId exists
+        uint256 maxArticleId = articleId.current();
+        require(existingArticleId < maxArticleId, "");
+        uint256 currentVersionId = versions[existingArticleId];
+        uint256 newVersionId = currentVersionId++;
+        string memory existingArticleIdStr = Strings.toString(
+            existingArticleId
+        );
+        string memory newVersionIdStr = Strings.toString(newVersionId);
+
+        string memory identifier = string.concat(
+            existingArticleIdStr,
+            "x",
+            newVersionIdStr
+        );
+
+        editors[identifier] = msg.sender;
+        links[identifier] = ipfsHash;
+
+        console.log("identifier", identifier);
+    }
 }
