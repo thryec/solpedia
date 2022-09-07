@@ -59,7 +59,7 @@ contract StateZeroTest is StateZero {
     function testAddVersionReverts() public {
         vm.expectRevert(bytes("This article does not exist."));
         uint256 nonexistentArticleId = 5;
-        wiki.addVersion(nonexistentArticleId, ipfsHash);
+        wiki.addVersion(nonexistentArticleId, secondVersionHash);
     }
 }
 
@@ -109,10 +109,12 @@ contract StateArticleCreatedTest is StateArticleCreated {
 }
 
 abstract contract StateArticleAndNewVersionCreated is StateZero {
+    uint256 articleId;
+
     function setUp() public virtual override {
         super.setUp();
 
-        uint256 articleId = wiki.createArticle(ipfsHash);
+        articleId = wiki.createArticle(ipfsHash);
         wiki.addVersion(articleId, ipfsHash);
     }
 }
@@ -120,7 +122,16 @@ abstract contract StateArticleAndNewVersionCreated is StateZero {
 contract StateArticleAndNewVersionCreatedTest is
     StateArticleAndNewVersionCreated
 {
-    function testAddVersion() public {}
+    function testAddVersion() public {
+        string memory newIdentifier = wiki.addVersion(
+            articleId,
+            thirdVersionHash
+        );
+
+        string memory articleIdStr = Strings.toString(articleId);
+        string memory identifier = string.concat(articleIdStr, "x", "2");
+        assertEq(newIdentifier, identifier);
+    }
 
     function testAddVersionStoresCorrectEditor() public {}
 

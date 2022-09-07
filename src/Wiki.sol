@@ -99,6 +99,7 @@ contract Wiki {
 
         editors[identifier] = msg.sender;
         links[identifier] = ipfsHash;
+        versions[existingArticleId] = newVersionId;
 
         emit NewVersionCreated(
             existingArticleId,
