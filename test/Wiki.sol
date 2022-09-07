@@ -10,6 +10,7 @@ abstract contract StateZero is Test {
     Wiki internal wiki;
     address alice;
     address bob;
+    address carol;
 
     string ipfsHash = "bafybohew2j2wbn3mzl7dakkoklstoas4jq3rj7wgiv6mmtvk7v7a";
     string secondVersionHash =
@@ -17,13 +18,27 @@ abstract contract StateZero is Test {
     string thirdVersionHash =
         "bafybohew2j2wbn3mzl7dakkoklstoas4jq3rj7wgiv6mmtvk7v7c";
 
+    event ArticleCreated(
+        uint256 indexed articleId,
+        address indexed creator,
+        string ipfsHash
+    );
+    event NewVersionCreated(
+        uint256 indexed articleId,
+        uint256 indexed versionId,
+        address indexed editor,
+        string ipfsHash
+    );
+
     function setUp() public virtual {
         wiki = new Wiki();
         alice = address(0x1);
         bob = address(0x2);
+        carol = address(0x3);
 
         vm.label(alice, "alice");
         vm.label(bob, "bob");
+        vm.label(carol, "carol");
     }
 }
 
@@ -50,11 +65,12 @@ contract StateZeroTest is StateZero {
         assertEq(link, ipfsHash);
     }
 
-    // function testCreateArticleEmitsEvent() public {
-    //     vm.expectEmit(0, alice, ipfsHash);
-    //     vm.prank(alice);
-    //     wiki.createArticle(ipfsHash);
-    // }
+    function testCreateArticleEmitsEvent() public {
+        vm.expectEmit(true, true, true);
+        emit ArticleCreated(0, alice, ipfsHash);
+        vm.prank(alice);
+        wiki.createArticle(ipfsHash);
+    }
 
     function testAddVersionReverts() public {
         vm.expectRevert(bytes("This article does not exist."));
@@ -101,8 +117,9 @@ contract StateArticleCreatedTest is StateArticleCreated {
         assertEq(link, secondVersionHash);
     }
 
-    // function testAddEmitsEvent() public {
-    //     vm.expectEmit(0, 1, bob, secondVersionHash);
+    // function testAddVersionEmitsEvent() public {
+    //     vm.expectEmit(true, true, true, true);
+    //     emit NewVersionCreated(0, 1, bob, secondVersionHash);
     //     vm.prank(bob);
     //     wiki.addVersion(articleId, secondVersionHash);
     // }
@@ -127,13 +144,25 @@ contract StateArticleAndNewVersionCreatedTest is
             articleId,
             thirdVersionHash
         );
-
         string memory articleIdStr = Strings.toString(articleId);
         string memory identifier = string.concat(articleIdStr, "x", "2");
         assertEq(newIdentifier, identifier);
     }
 
-    function testAddVersionStoresCorrectEditor() public {}
+    function testAddVersionStoresCorrectEditor() public {
+        vm.prank(carol);
+        wiki.addVersion(articleId, thirdVersionHash);
+        string memory articleIdStr = Strings.toString(articleId);
+        string memory identifier = string.concat(articleIdStr, "x", "2");
+        address editor = wiki.editors(identifier);
+        assertEq(editor, carol);
+    }
 
-    function testAddVersionStoresCorrectLink() public {}
+    function testAddVersionStoresCorrectLink() public {
+        wiki.addVersion(articleId, thirdVersionHash);
+        string memory articleIdStr = Strings.toString(articleId);
+        string memory identifier = string.concat(articleIdStr, "x", "2");
+        string memory link = wiki.links(identifier);
+        assertEq(link, thirdVersionHash);
+    }
 }
