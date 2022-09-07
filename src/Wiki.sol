@@ -76,6 +76,7 @@ contract Wiki {
 
     function addVersion(uint256 existingArticleId, string calldata ipfsHash)
         public
+        returns (string memory latestIdentifier)
     {
         uint256 maxArticleId = articleId.current();
         require(
@@ -99,12 +100,12 @@ contract Wiki {
         editors[identifier] = msg.sender;
         links[identifier] = ipfsHash;
 
-        console2.log("new version identifier", identifier);
         emit NewVersionCreated(
             existingArticleId,
             newVersionId,
             msg.sender,
             ipfsHash
         );
+        return identifier;
     }
 }
