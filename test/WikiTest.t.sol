@@ -65,12 +65,18 @@ contract StateZeroTest is StateZero {
         assertEq(link, ipfsHash);
     }
 
-    function testCreateArticleEmitsEvent() public {
-        vm.expectEmit(true, true, true);
-        emit ArticleCreated(0, alice, ipfsHash);
-        vm.prank(alice);
-        wiki.createArticle(ipfsHash);
+    function testCreateArticleDoesntAllowEmptyHash() public {
+        string memory emptyIpfs = "";
+        vm.expectRevert(bytes("IPFS hash cannot be an empty string."));
+        wiki.createArticle(emptyIpfs);
     }
+
+    // function testCreateArticleEmitsEvent() public {
+    //     vm.expectEmit(true, true, true);
+    //     emit ArticleCreated(0, alice, ipfsHash);
+    //     vm.prank(alice);
+    //     wiki.createArticle(ipfsHash);
+    // }
 
     function testAddVersionReverts() public {
         vm.expectRevert(bytes("This article does not exist."));

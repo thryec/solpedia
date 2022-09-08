@@ -4,7 +4,7 @@ pragma solidity 0.8.16;
 import "../src/Wiki.sol";
 import "forge-std/Script.sol";
 
-contract ContractScript is Script {
+contract WikiScript is Script {
     function setUp() public {}
 
     function run() public {

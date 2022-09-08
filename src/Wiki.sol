@@ -4,6 +4,7 @@ pragma solidity 0.8.16;
 import {Counters} from "lib/openzeppelin-contracts/contracts/utils/Counters.sol";
 import {Strings} from "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
 import {console2} from "forge-std/console2.sol";
+import {console} from "forge-std/console.sol";
 
 contract Wiki {
     using Counters for Counters.Counter;
@@ -47,6 +48,11 @@ contract Wiki {
         public
         returns (uint256 createdArticleId)
     {
+        bytes memory tempIpfsHash = bytes(ipfsHash);
+        require(
+            tempIpfsHash.length > 0,
+            "IPFS hash cannot be an empty string."
+        );
         uint256 currentArticleId = articleId.current();
         uint256 currentVersionId = versionId.current();
         string memory currentArticleIdStr = Strings.toString(currentArticleId);
