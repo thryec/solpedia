@@ -4,7 +4,6 @@ pragma solidity 0.8.16;
 import {Counters} from "lib/openzeppelin-contracts/contracts/utils/Counters.sol";
 import {Strings} from "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
 import {console2} from "forge-std/console2.sol";
-import {console} from "forge-std/console.sol";
 
 contract Wiki {
     using Counters for Counters.Counter;
@@ -24,6 +23,19 @@ contract Wiki {
     /// @notice Mapping to track the number of versions in each article.
     mapping(uint256 => uint256) public versions;
 
+    /// @notice Struct to return article info
+    struct Article {
+        uint256 articleId;
+        string ipfsHash;
+    }
+
+    /// @notice Struct to return version info
+    struct Version {
+        uint256 articleId;
+        uint256 versionId;
+        string ipfsHash;
+    }
+
     /// @notice Emits when a new article is created.
     event ArticleCreated(
         uint256 indexed articleId,
@@ -38,6 +50,8 @@ contract Wiki {
         address indexed editor,
         string ipfsHash
     );
+
+    //------------------- Mutative Functions ------------------- //
 
     /**
      * @notice Creates a new article.
@@ -115,4 +129,54 @@ contract Wiki {
         );
         return identifier;
     }
+
+    // ------------------- View Functions ------------------- //
+
+    function getArticlesCreatedByAddress(address user)
+        public
+        view
+        returns (Article[] memory)
+    {
+        uint256 numArticles = articleId.current();
+        uint256 userArticles = 0;
+
+        for (uint256 i = 0; i < numArticles; i++) {
+            string memory currentArticleIdStr = Strings.toString(i);
+            string memory identifier = string.concat(
+                currentArticleIdStr,
+                "x",
+                "0"
+            );
+
+            if (editors[identifier] == user) {
+                userArticles++;
+                console2.log("identifiers", identifier);
+            }
+        }
+
+        Article[] memory returnArray = new Article[](userArticles);
+
+        for (uint256 i = 0; i < numArticles; i++) {
+            string memory currentArticleIdStr = Strings.toString(i);
+            string memory identifier = string.concat(
+                currentArticleIdStr,
+                "x",
+                "0"
+            );
+            if (editors[identifier] == user) {
+                Article memory currentArticle;
+                currentArticle.articleId = i;
+                currentArticle.ipfsHash = links[identifier];
+                returnArray[i] = currentArticle;
+            }
+        }
+
+        return returnArray;
+    }
+
+    function getVersionCreatedByAddress(address user)
+        public
+        view
+        returns (Version[] memory)
+    {}
 }

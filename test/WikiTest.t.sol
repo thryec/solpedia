@@ -11,6 +11,7 @@ abstract contract StateZero is Test {
     address alice;
     address bob;
     address carol;
+    address root = address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
 
     string ipfsHash = "bafybohew2j2wbn3mzl7dakkoklstoas4jq3rj7wgiv6mmtvk7v7a";
     string secondVersionHash =
@@ -83,6 +84,11 @@ contract StateZeroTest is StateZero {
         uint256 nonexistentArticleId = 5;
         wiki.addVersion(nonexistentArticleId, secondVersionHash);
     }
+
+    function testGetArticlesByAddressReturnsEmptyArray() public {
+        Wiki.Article[] memory result = wiki.getArticlesCreatedByAddress(root);
+        assertEq(result.length, 0);
+    }
 }
 
 abstract contract StateArticleCreated is StateZero {
@@ -129,6 +135,18 @@ contract StateArticleCreatedTest is StateArticleCreated {
     //     vm.prank(bob);
     //     wiki.addVersion(articleId, secondVersionHash);
     // }
+
+    function testGetArticlesByCreatorReturnsSingleElementArray() public {
+        Wiki.Article[] memory result = wiki.getArticlesCreatedByAddress(root);
+        assertEq(result.length, 1);
+        assertEq(result[0].articleId, articleId);
+        assertEq(result[0].ipfsHash, ipfsHash);
+    }
+
+    function testGetArticlesByRandomAddressReturnsEmptyArray() public {
+        Wiki.Article[] memory result = wiki.getArticlesCreatedByAddress(alice);
+        assertEq(result.length, 0);
+    }
 }
 
 abstract contract StateArticleAndNewVersionCreated is StateZero {
