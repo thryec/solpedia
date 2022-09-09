@@ -132,6 +132,12 @@ contract Wiki {
 
     // ------------------- View Functions ------------------- //
 
+    function getAllLatestArticles() public view returns (string[]) {
+        uint256 maxArticleId = articleId.current();
+    }
+
+    // ------------------- User View Functions ------------------- //
+
     function getArticlesCreatedByAddress(address user)
         public
         view
@@ -178,5 +184,7 @@ contract Wiki {
         public
         view
         returns (Version[] memory)
-    {}
+    {
+        // iterate through all articles and versions to find editor = user
+    }
 }
