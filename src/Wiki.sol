@@ -132,9 +132,17 @@ contract Wiki {
 
     // ------------------- View Functions ------------------- //
 
-    function getAllLatestArticles() public view returns (string[]) {
-        uint256 maxArticleId = articleId.current();
-    }
+    // function getAllLatestArticles() public view returns (string[] memory) {
+    //     uint256 maxArticleId = articleId.current();
+    //     string[] returnArray;
+    //     // get latest version of each article
+
+    //     for (uint256 i = 0; i < maxArticleId; i++) {
+    //         uint256 latestVersion = versions[i];
+    //         console2.log("latest version", latestVersion);
+    //     }
+    //     // index link and return
+    // }
 
     // ------------------- User View Functions ------------------- //
 

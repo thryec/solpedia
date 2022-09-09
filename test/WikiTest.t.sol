@@ -3,7 +3,7 @@ pragma solidity 0.8.16;
 
 import "../src/Wiki.sol";
 import "forge-std/Test.sol";
-import {Vm} from "forge-std/Vm.sol";
+// import {Vm} from "forge-std/Vm.sol";
 import {console2} from "forge-std/console2.sol";
 
 abstract contract StateZero is Test {
@@ -80,12 +80,12 @@ contract StateZeroTest is StateZero {
         wiki.addVersion(nonexistentArticleId, secondVersionHash);
     }
 
-    // function testCreateArticleEmitsEvent() public {
-    //     vm.expectEmit(true, true, true);
-    //     emit ArticleCreated(0, alice, ipfsHash);
-    //     vm.prank(alice);
-    //     wiki.createArticle(ipfsHash);
-    // }
+    function testCreateArticleEmitsEvent() public {
+        vm.expectEmit(true, true, true, true);
+        emit ArticleCreated(0, alice, ipfsHash);
+        vm.prank(alice);
+        wiki.createArticle(ipfsHash);
+    }
 
     // function testGetArticlesByAddressReturnsEmptyArray() public {
     //     Wiki.Article[] memory result = wiki.getArticlesCreatedByAddress(root);
@@ -131,12 +131,12 @@ contract StateArticleCreatedTest is StateArticleCreated {
         assertEq(link, secondVersionHash);
     }
 
-    // function testAddVersionEmitsEvent() public {
-    //     vm.expectEmit(true, true, true, true);
-    //     emit NewVersionCreated(0, 1, bob, secondVersionHash);
-    //     vm.prank(bob);
-    //     wiki.addVersion(articleId, secondVersionHash);
-    // }
+    function testAddVersionEmitsEvent() public {
+        vm.expectEmit(true, true, true, true);
+        emit NewVersionCreated(0, 1, bob, secondVersionHash);
+        vm.prank(bob);
+        wiki.addVersion(articleId, secondVersionHash);
+    }
 
     // function testGetArticlesByCreatorReturnsSingleElementArray() public {
     //     Wiki.Article[] memory result = wiki.getArticlesCreatedByAddress(root);
