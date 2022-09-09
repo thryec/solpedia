@@ -3,7 +3,6 @@ pragma solidity 0.8.16;
 
 import "../src/Wiki.sol";
 import "forge-std/Test.sol";
-// import {Vm} from "forge-std/Vm.sol";
 import {console2} from "forge-std/console2.sol";
 
 abstract contract StateZero is Test {
@@ -87,6 +86,8 @@ contract StateZeroTest is StateZero {
         wiki.createArticle(ipfsHash);
     }
 
+    function testGetArticlesReturnsEmptyArray() public {}
+
     // function testGetArticlesByAddressReturnsEmptyArray() public {
     //     Wiki.Article[] memory result = wiki.getArticlesCreatedByAddress(root);
     //     assertEq(result.length, 0);
@@ -136,6 +137,11 @@ contract StateArticleCreatedTest is StateArticleCreated {
         emit NewVersionCreated(0, 1, bob, secondVersionHash);
         vm.prank(bob);
         wiki.addVersion(articleId, secondVersionHash);
+    }
+
+    function testGetArticlesReturnsSingleArray() public {
+        string[] memory result = wiki.getAllLatestArticles();
+        console2.log("result", result[0]);
     }
 
     // function testGetArticlesByCreatorReturnsSingleElementArray() public {

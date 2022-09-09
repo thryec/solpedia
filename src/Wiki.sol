@@ -132,17 +132,25 @@ contract Wiki {
 
     // ------------------- View Functions ------------------- //
 
-    // function getAllLatestArticles() public view returns (string[] memory) {
-    //     uint256 maxArticleId = articleId.current();
-    //     string[] returnArray;
-    //     // get latest version of each article
+    function getAllLatestArticles() public view returns (string[] memory) {
+        uint256 maxArticleId = articleId.current();
+        uint256 totalNumArticles = maxArticleId + 1;
+        string[] memory returnArray = new string[](totalNumArticles);
 
-    //     for (uint256 i = 0; i < maxArticleId; i++) {
-    //         uint256 latestVersion = versions[i];
-    //         console2.log("latest version", latestVersion);
-    //     }
-    //     // index link and return
-    // }
+        for (uint256 i = 0; i < maxArticleId; i++) {
+            uint256 latestVersionId = versions[i];
+            string memory articleIdStr = Strings.toString(i);
+            string memory versionIdStr = Strings.toString(latestVersionId);
+            string memory identifier = string.concat(
+                articleIdStr,
+                "x",
+                versionIdStr
+            );
+            string memory latestLink = links[identifier];
+            returnArray[i] = latestLink;
+        }
+        return returnArray;
+    }
 
     // ------------------- User View Functions ------------------- //
 
