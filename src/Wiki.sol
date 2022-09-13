@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.16;
 
-import {Counters} from "lib/openzeppelin-contracts/contracts/utils/Counters.sol";
-import {Strings} from "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
-import {console2} from "forge-std/console2.sol";
+import "lib/openzeppelin-contracts/contracts/utils/Counters.sol";
+import "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
+import "forge-std/console2.sol";
 
 contract Wiki {
     using Counters for Counters.Counter;

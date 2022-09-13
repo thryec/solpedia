@@ -3,7 +3,7 @@ pragma solidity 0.8.16;
 
 import "../src/Wiki.sol";
 import "forge-std/Test.sol";
-import {console2} from "forge-std/console2.sol";
+import "forge-std/console2.sol";
 
 abstract contract StateZero is Test {
     Wiki internal wiki;
@@ -13,7 +13,7 @@ abstract contract StateZero is Test {
     address root = address(0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84);
 
     string ipfsHash = "bafybohew2j2wbn3mzl7dakkoklstoas4jq3rj7wgiv6mmtvk7v7a";
-    string secondIpfsHash =
+    string secondArticleHash =
         "bafybohew2j2wbn3mzl7dakkoklstoas4jq3rj7wgiv6mmtvk7v7b";
     string secondVersionHash =
         "bafybohew2j2wbn3mzl7dakkoklstoas4jq3rj7wgiv6mmtvk7v7c";
@@ -141,6 +141,7 @@ contract StateArticleCreatedTest is StateArticleCreated {
 
     function testGetArticlesReturnsSingleArray() public {
         string[] memory result = wiki.getAllLatestArticles();
+        assertEq(result[0], ipfsHash);
         console2.log("result", result[0]);
     }
 
@@ -196,5 +197,9 @@ contract StateArticleAndNewVersionCreatedTest is
         string memory identifier = string.concat(articleIdStr, "x", "2");
         string memory link = wiki.links(identifier);
         assertEq(link, thirdVersionHash);
+    }
+
+    function testAddArticle() public {
+        uint256 articleId2 = wiki.createArticle(secondArticleHash);
     }
 }
