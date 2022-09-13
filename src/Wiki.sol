@@ -1,11 +1,15 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.16;
 
+import "forge-std/console2.sol";
 import "lib/openzeppelin-contracts/contracts/utils/Counters.sol";
 import "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
-import "forge-std/console2.sol";
+import "lib/openzeppelin-contracts/contracts/access/Ownable.sol";
+// dependencies for upgradability
+import "lib/openzeppelin-contracts/contracts/proxy/utils/Initializable.sol";
+import "lib/openzeppelin-contracts/contracts/proxy/utils/UUPSUpgradeable.sol";
 
-contract Wiki {
+contract Wiki is Ownable, Initializable, UUPSUpgradeable {
     using Counters for Counters.Counter;
 
     /// @notice Counter to keep track of unique article IDs.
@@ -51,7 +55,37 @@ contract Wiki {
         string ipfsHash
     );
 
-    //------------------- Mutative Functions ------------------- //
+    //------------------- Upgradability Functions -------------------//
+
+    function initialize() public initializer {}
+
+    function authorizeUpgrade(address implementationAddress) public onlyOwner {
+        _authorizeUpgrade(implementationAddress);
+    }
+
+    function _authorizeUpgrade(address implementationAddress)
+        internal
+        virtual
+        override
+        onlyOwner
+    {
+        _authorizeUpgrade(implementationAddress);
+    }
+
+    function upgradeTo(address newImplementation) external virtual override {
+        ERC1967Upgrade._upgradeToAndCall(newImplementation, bytes(""), false);
+    }
+
+    function upgradeToAndCall(address newImplementation, bytes memory data)
+        external
+        payable
+        virtual
+        override
+    {
+        ERC1967Upgrade._upgradeToAndCall(newImplementation, data, false);
+    }
+
+    //------------------- Mutative Functions -------------------//
 
     /**
      * @notice Creates a new article.

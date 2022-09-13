@@ -201,5 +201,6 @@ contract StateArticleAndNewVersionCreatedTest is
 
     function testAddArticle() public {
         uint256 articleId2 = wiki.createArticle(secondArticleHash);
+        assertEq(articleId2, 1);
     }
 }
