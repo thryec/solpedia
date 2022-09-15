@@ -4,3 +4,6 @@
 [submodule "lib/openzeppelin-contracts"]
 	path = lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "lib/foundry-upgrades.git"]
+	path = lib/foundry-upgrades.git
+	url = https://github.com/odyslam/foundry-upgrades.git

@@ -1,3 +1,6 @@
-ds-test/=lib/forge-std/lib/ds-test/src/
+ds-test/=lib/foundry-upgrades.git/lib/ds-test/src/
 forge-std/=lib/forge-std/src/
+foundry-upgrades.git/=lib/foundry-upgrades.git/src/
 openzeppelin-contracts/=lib/openzeppelin-contracts/
+openzeppelin/=lib/foundry-upgrades.git/lib/openzeppelin-contracts/contracts/
+solmate/=lib/foundry-upgrades.git/lib/solmate/src/

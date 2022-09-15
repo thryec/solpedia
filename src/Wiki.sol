@@ -63,13 +63,12 @@ contract Wiki is Ownable, Initializable, UUPSUpgradeable {
         _authorizeUpgrade(implementationAddress);
     }
 
-    function _authorizeUpgrade(address implementationAddress)
+    function _authorizeUpgrade(address newImplementation)
         internal
-        virtual
         override
         onlyOwner
     {
-        _authorizeUpgrade(implementationAddress);
+        _authorizeUpgrade(newImplementation);
     }
 
     function upgradeTo(address newImplementation) external virtual override {
