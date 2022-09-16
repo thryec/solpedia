@@ -142,7 +142,6 @@ contract StateArticleCreatedTest is StateArticleCreated {
     function testGetArticlesReturnsSingleArray() public {
         string[] memory result = wiki.getAllLatestArticles();
         assertEq(result[0], ipfsHash);
-        console2.log("result", result[0]);
     }
 
     // function testGetArticlesByCreatorReturnsSingleElementArray() public {
@@ -165,7 +164,7 @@ abstract contract StateArticleAndNewVersionCreated is StateZero {
         super.setUp();
 
         articleId = wiki.createArticle(ipfsHash);
-        wiki.addVersion(articleId, ipfsHash);
+        wiki.addVersion(articleId, secondVersionHash);
     }
 }
 
@@ -202,5 +201,10 @@ contract StateArticleAndNewVersionCreatedTest is
     function testAddArticle() public {
         uint256 articleId2 = wiki.createArticle(secondArticleHash);
         assertEq(articleId2, 1);
+    }
+
+    function testGetAllArticlesReturnsLatestVersion() public {
+        string[] memory result = wiki.getAllLatestArticles();
+        assertEq(result[0], secondVersionHash);
     }
 }

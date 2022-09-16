@@ -229,7 +229,7 @@ contract Wiki is Ownable, Initializable, UUPSUpgradeable {
         return returnArray;
     }
 
-    function getVersionCreatedByAddress(address user)
+    function getVersionsCreatedByAddress(address user)
         public
         view
         returns (Version[] memory)
