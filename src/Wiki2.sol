@@ -9,7 +9,7 @@ import "lib/openzeppelin-contracts/contracts/access/Ownable.sol";
 import "lib/openzeppelin-contracts/contracts/proxy/utils/Initializable.sol";
 import "lib/openzeppelin-contracts/contracts/proxy/utils/UUPSUpgradeable.sol";
 
-contract Wiki is Ownable, Initializable, UUPSUpgradeable {
+contract Wiki2 is Ownable, Initializable, UUPSUpgradeable {
     using Counters for Counters.Counter;
 
     /// @notice Counter to keep track of unique article IDs.
