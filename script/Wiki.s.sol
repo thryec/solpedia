@@ -36,17 +36,23 @@ contract WikiScript is Script {
 
         uups = proxyManager.deployUupsProxy(address(wiki), admin, data);
         console2.log("uups address", address(uups));
-        vm.prank(admin);
-        console2.log("uups admin", uups.admin());
 
-        // bytes memory functionSelector = keccak256("store(uint256)");
-        // console2.log("functionSelector", functionSelector);
+        vm.startPrank(admin);
+        console2.log("uups admin", uups.admin());
+        address currentImplementation = uups.implementation();
+        console2.log("current implementation", currentImplementation);
+        vm.stopPrank();
 
         Wiki2 wiki2 = new Wiki2();
         vm.label(address(wiki2), "wiki2 address");
         console2.log("wiki2 address", address(wiki2));
 
         proxyManager.upgrade(address(wiki2), admin, root);
+
+        vm.startPrank(admin);
+        address newImplementation = uups.implementation();
+        console2.log("new implementation", newImplementation);
+        vm.stopPrank();
 
         // vm.stopBroadcast();
     }
