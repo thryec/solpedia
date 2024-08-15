@@ -1,4 +1,4 @@
-TODO:
+## Decentralised Wikipedia 
 
-- upgradeable proxy patterns - ERC1967 or Diamond (OZ)
-- module extensions
+- IPFS storage
+- EIP-1967 Upgradable Proxy 
